@@ -1,6 +1,12 @@
 import sys
 from pathlib import Path
 
+ codex/update-.gitignore-for-flow-analytics-j6bd9k
+from sunburst_utils import build_figure_from_gsheets
+
+
+OUTPUT_PATH = Path("outputs/sunburst_holdings.html")
+
 import gspread
 import pandas as pd
 import plotly.express as px
@@ -96,10 +102,21 @@ def build_sunburst(df: pd.DataFrame) -> px.sunburst:
 def save_output(fig: px.sunburst) -> None:
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     fig.write_html(str(OUTPUT_PATH), include_plotlyjs="cdn")
+ main
 
 
 def main() -> int:
     try:
+ codex/update-.gitignore-for-flow-analytics-j6bd9k
+        fig = build_figure_from_gsheets()
+        OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+        fig.write_html(str(OUTPUT_PATH), include_plotlyjs="cdn")
+        print(f"Sunburst chart saved to {OUTPUT_PATH}")
+        return 0
+    except Exception as error:
+        print(f"Error: {error}")
+        return 1
+
         config = load_config()
         validate_config(config)
         df = load_holdings(config)
@@ -121,6 +138,7 @@ def main() -> int:
     except Exception as error:
         print(f"Unexpected error: {error}")
     return 1
+ main
 
 
 if __name__ == "__main__":
