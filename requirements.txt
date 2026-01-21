@@ -2,4 +2,7 @@ pandas
 gspread
 google-auth
 openpyxl
+ codex/update-.gitignore-for-flow-analytics-blxz5d
 plotly
+
+ main
