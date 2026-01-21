@@ -207,3 +207,10 @@ marimo/_lsp/
 __marimo__/
 data/private/
 outputs/
+codex/update-.gitignore-for-flow-analytics-6uyk1c
+
+# Project secrets & local artifacts
+.streamlit/secrets.toml
+*.json
+
+main
