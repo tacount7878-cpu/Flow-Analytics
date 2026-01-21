@@ -8,3 +8,11 @@
 - Install dependencies and run the smoke test:
   - `pip install -r requirements.txt`
   - `python scripts/gsheets_smoke_test.py`
+ codex/update-.gitignore-for-flow-analytics-blxz5d
+
+## Sunburst (Local)
+- Ensure `.streamlit/secrets.toml` exists locally with `[gsheets]` settings (do not commit it).
+- Run `python scripts/build_sunburst.py`.
+- Output HTML is saved to `outputs/sunburst_holdings.html`.
+
+ main
