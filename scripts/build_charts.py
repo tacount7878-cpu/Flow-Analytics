@@ -5,14 +5,6 @@ import gspread
 import pandas as pd
 import plotly.express as px
 
- codex/update-.gitignore-for-flow-analytics-wmrhlb
-SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.append(str(SCRIPT_DIR))
-
-from plotly_html_effects import write_html_with_effects
-
-
- main
 try:
     import tomllib
 except ModuleNotFoundError:  # pragma: no cover - fallback for Python < 3.11
@@ -26,21 +18,20 @@ REQUIRED_COLUMNS = ["投資地區", "資產類別", "代號", "名稱", "總市�
 
 def load_config() -> dict:
     if not SECRETS_PATH.exists():
-        raise FileNotFoundError(
-            "Missing .streamlit/secrets.toml. Please create it locally."
-        )
+        raise FileNotFoundError("Missing .streamlit/secrets.toml. Please create it locally.")
 
     with SECRETS_PATH.open("rb") as handle:
         data = tomllib.load(handle)
 
     gsheets = data.get("gsheets", {})
+    spreadsheet_id = gsheets.get("spreadsheet_id")
+    worksheet = gsheets.get("worksheet", "holdings")
+    service_account_json_path = gsheets.get("service_account_json_path", "data/private/service_account.json")
+
     return {
-        "spreadsheet_id": gsheets.get("spreadsheet_id"),
-        "worksheet": gsheets.get("worksheet", "holdings"),
-        "service_account_json_path": gsheets.get(
-            "service_account_json_path",
-            "data/private/service_account.json",
-        ),
+        "spreadsheet_id": spreadsheet_id,
+        "worksheet": worksheet,
+        "service_account_json_path": service_account_json_path,
     }
 
 
@@ -55,9 +46,7 @@ def validate_config(config: dict) -> None:
 def load_holdings(config: dict) -> pd.DataFrame:
     service_account_path = Path(config["service_account_json_path"])
     if not service_account_path.exists():
-        raise FileNotFoundError(
-            f"Service account JSON not found at {service_account_path}"
-        )
+        raise FileNotFoundError(f"Service account JSON not found at {service_account_path}")
 
     client = gspread.service_account(filename=str(service_account_path))
     spreadsheet = client.open_by_key(config["spreadsheet_id"])
@@ -66,29 +55,13 @@ def load_holdings(config: dict) -> pd.DataFrame:
     return pd.DataFrame(records)
 
 
-def redact_preview(df: pd.DataFrame) -> str:
-    preview = df.head(3).copy()
-    for column in preview.columns:
-        preview[column] = preview[column].apply(
-            lambda value: "***" if pd.notna(value) else ""
-        )
-    return preview.to_string(index=False)
-
-
-def raise_validation_error(message: str, df: pd.DataFrame) -> None:
-    columns = list(df.columns)
-    preview = redact_preview(df)
-    raise ValueError(
-        f"{message}\nColumns: {columns}\nPreview (redacted):\n{preview}"
-    )
-
-
 def clean_holdings(df: pd.DataFrame) -> pd.DataFrame:
-    missing = [column for column in REQUIRED_COLUMNS if column not in df.columns]
+    missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
     if missing:
-        raise_validation_error(f"Missing required columns: {', '.join(missing)}", df)
+        raise ValueError(f"Missing required columns: {', '.join(missing)}")
 
     df = df.copy()
+
     df["總市值(TWD)"] = (
         df["總市值(TWD)"]
         .astype(str)
@@ -97,67 +70,30 @@ def clean_holdings(df: pd.DataFrame) -> pd.DataFrame:
     )
     df["總市值(TWD)"] = pd.to_numeric(df["總市值(TWD)"], errors="coerce")
 
-    if df["總市值(TWD)"].isna().all():
-        raise_validation_error("Column 總市值(TWD) has no valid numeric values.", df)
-
     df = df[df["總市值(TWD)"] > 0]
     if df.empty:
-        raise_validation_error("No rows with 總市值(TWD) > 0.", df)
+        raise ValueError("No rows with 總市值(TWD) > 0")
 
     return df
 
 
-def build_sunburst(df: pd.DataFrame) -> px.sunburst:
- codex/update-.gitignore-for-flow-analytics-wmrhlb
-    fig_sunburst = px.sunburst(
-
- codex/update-.gitignore-for-flow-analytics-av70ig
-    fig_sunburst = px.sunburst(
-
-    fig = px.sunburst( main
- main
+def build_sunburst(df: pd.DataFrame):
+    fig = px.sunburst(
         df,
         path=["投資地區", "資產類別", "代號"],
         values="總市值(TWD)",
         hover_data={"名稱": True, "總市值(TWD)": ":,.0f"},
     )
- codex/update-.gitignore-for-flow-analytics-wmrhlb
-    # 加入平滑轉場動畫
-    fig_sunburst.update_layout(
-        transition={
-            "duration": 700,  # 動畫持續 700 毫秒
-            "easing": "elastic-out",  # 更有彈性的緩出效果
-        }
-    )
-    fig_sunburst.update_layout(
-
- codex/update-.gitignore-for-flow-analytics-av70ig
-    # 加入平滑轉場動畫
-    fig_sunburst.update_layout(
-        transition={
-            "duration": 1000,  # 動畫持續 1000 毫秒 (1秒)
-            "easing": "cubic-in-out",  # 緩入緩出的平滑效果曲線
-        }
-    )
-    fig_sunburst.update_layout(
 
     fig.update_layout(
- main
- main
         title="Flow-Analytics｜Sunburst（地區 → 資產 → 個股）",
         margin=dict(t=80, l=20, r=20, b=20),
         font=dict(size=14),
         uniformtext=dict(minsize=10, mode="hide"),
+        transition=dict(duration=700, easing="cubic-in-out"),
     )
- codex/update-.gitignore-for-flow-analytics-wmrhlb
-    fig_sunburst.update_traces(
-
- codex/update-.gitignore-for-flow-analytics-av70ig
-    fig_sunburst.update_traces(
 
     fig.update_traces(
- main
- main
         hovertemplate=(
             "<b>%{label}</b><br>"
             "名稱: %{customdata[0]}<br>"
@@ -165,31 +101,24 @@ def build_sunburst(df: pd.DataFrame) -> px.sunburst:
             "<extra></extra>"
         )
     )
- codex/update-.gitignore-for-flow-analytics-wmrhlb
-    return fig_sunburst
-
-
- codex/update-.gitignore-for-flow-analytics-av70ig
-    return fig_sunburst
-
     return fig
- main
 
- main
 
-def build_treemap(df: pd.DataFrame) -> px.treemap:
+def build_treemap(df: pd.DataFrame):
     fig = px.treemap(
         df,
         path=["投資地區", "代號"],
         values="總市值(TWD)",
         hover_data={"名稱": True, "總市值(TWD)": ":,.0f"},
     )
+
     fig.update_layout(
         title="Flow-Analytics｜Treemap（地區 → 個股）",
         margin=dict(t=80, l=20, r=20, b=20),
         font=dict(size=14),
         uniformtext=dict(minsize=10, mode="hide"),
     )
+
     fig.update_traces(
         hovertemplate=(
             "<b>%{label}</b><br>"
@@ -205,6 +134,7 @@ def main() -> int:
     try:
         config = load_config()
         validate_config(config)
+
         df = load_holdings(config)
         df = clean_holdings(df)
 
@@ -212,28 +142,26 @@ def main() -> int:
         sunburst_path = OUTPUT_DIR / "sunburst.html"
         treemap_path = OUTPUT_DIR / "treemap.html"
 
- codex/update-.gitignore-for-flow-analytics-wmrhlb
-        write_html_with_effects(build_sunburst(df), sunburst_path, "sunburst")
-        write_html_with_effects(build_treemap(df), treemap_path, "treemap")
-
         build_sunburst(df).write_html(str(sunburst_path), include_plotlyjs="cdn")
         build_treemap(df).write_html(str(treemap_path), include_plotlyjs="cdn")
- main
 
         print("✅ 圖表已生成：outputs/sunburst.html")
+        print("✅ 圖表已生成：outputs/treemap.html")
         return 0
-    except FileNotFoundError as error:
-        print(f"Error: {error}")
+
     except gspread.exceptions.WorksheetNotFound as error:
         print(f"Error: Worksheet not found: {error}")
     except gspread.exceptions.SpreadsheetNotFound as error:
         print(f"Error: Spreadsheet not found or no access: {error}")
     except gspread.exceptions.APIError as error:
         print(f"Error: Google API error: {error}")
+    except FileNotFoundError as error:
+        print(f"Error: {error}")
     except ValueError as error:
         print(f"Error: {error}")
     except Exception as error:
         print(f"Unexpected error: {error}")
+
     return 1
 
 
