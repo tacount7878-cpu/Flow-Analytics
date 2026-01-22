@@ -8,11 +8,14 @@
 - Install dependencies and run the smoke test:
   - `pip install -r requirements.txt`
   - `python scripts/gsheets_smoke_test.py`
+ codex/update-.gitignore-for-flow-analytics-wmrhlb
+
  codex/update-.gitignore-for-flow-analytics-av70ig
 
  codex/update-.gitignore-for-flow-analytics-j6bd9k
 
  codex/update-.gitignore-for-flow-analytics-blxz5d
+ main
  main
  main
 
@@ -21,17 +24,23 @@
 - Run `python scripts/build_sunburst.py`.
 - Output HTML is saved to `outputs/sunburst_holdings.html`.
 
+ codex/update-.gitignore-for-flow-analytics-wmrhlb
+
  codex/update-.gitignore-for-flow-analytics-av70ig
 
  codex/update-.gitignore-for-flow-analytics-j6bd9k
+ main
  main
 ## 如何執行（Windows）
 - 安裝依賴：`py -m pip install -r requirements.txt`
 - 產出 HTML：`py scripts/build_sunburst.py`
 - 跑 Streamlit：`py -m streamlit run app.py`
+ codex/update-.gitignore-for-flow-analytics-wmrhlb
+
  codex/update-.gitignore-for-flow-analytics-av70ig
 
 
+ main
  main
  main
  main

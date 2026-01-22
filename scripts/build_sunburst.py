@@ -1,14 +1,22 @@
 import sys
 from pathlib import Path
 
+ codex/update-.gitignore-for-flow-analytics-wmrhlb
+
  codex/update-.gitignore-for-flow-analytics-av70ig
 
  codex/update-.gitignore-for-flow-analytics-j6bd9k
 main
+ main
 from sunburst_utils import build_figure_from_gsheets
 
 
 OUTPUT_PATH = Path("outputs/sunburst_holdings.html")
+
+ codex/update-.gitignore-for-flow-analytics-wmrhlb
+
+def main() -> int:
+    try:
 
  codex/update-.gitignore-for-flow-analytics-av70ig
 
@@ -117,6 +125,7 @@ def main() -> int:
     try:
  codex/update-.gitignore-for-flow-analytics-j6bd9k
  main
+ main
         fig = build_figure_from_gsheets()
         OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
         fig.write_html(str(OUTPUT_PATH), include_plotlyjs="cdn")
@@ -125,6 +134,8 @@ def main() -> int:
     except Exception as error:
         print(f"Error: {error}")
         return 1
+
+ codex/update-.gitignore-for-flow-analytics-wmrhlb
 
  codex/update-.gitignore-for-flow-analytics-av70ig
 
@@ -151,6 +162,7 @@ def main() -> int:
     return 1
  main
 
+ main
  main
 
 if __name__ == "__main__":
