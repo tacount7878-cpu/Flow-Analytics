@@ -207,6 +207,8 @@ marimo/_lsp/
 __marimo__/
 data/private/
 outputs/
+ codex/update-.gitignore-for-flow-analytics-av70ig
+=======
  codex/update-.gitignore-for-flow-analytics-j6bd9k
 =======
 codex/update-.gitignore-for-flow-analytics-blxz5d
@@ -214,15 +216,19 @@ codex/update-.gitignore-for-flow-analytics-blxz5d
 codex/update-.gitignore-for-flow-analytics-6uyk1c
  main
  main
+ main
 
 # Project secrets & local artifacts
 .streamlit/secrets.toml
 *.json
+ codex/update-.gitignore-for-flow-analytics-av70ig
+
  codex/update-.gitignore-for-flow-analytics-j6bd9k
-=======
+
 codex/update-.gitignore-for-flow-analytics-blxz5d
 
 
 main
+ main
  main
  main

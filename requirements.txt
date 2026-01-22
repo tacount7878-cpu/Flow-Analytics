@@ -2,6 +2,10 @@ pandas
 gspread
 google-auth
 openpyxl
+ codex/update-.gitignore-for-flow-analytics-av70ig
+plotly
+streamlit
+
  codex/update-.gitignore-for-flow-analytics-j6bd9k
 plotly
 streamlit
@@ -9,5 +13,6 @@ streamlit
  codex/update-.gitignore-for-flow-analytics-blxz5d
 plotly
 
+ main
  main
  main
