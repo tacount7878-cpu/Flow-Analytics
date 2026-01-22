@@ -100,12 +100,16 @@ def clean_holdings(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_sunburst(df: pd.DataFrame) -> px.sunburst:
+ codex/update-.gitignore-for-flow-analytics-av70ig
     fig_sunburst = px.sunburst(
+
+    fig = px.sunburst( main
         df,
         path=["投資地區", "資產類別", "代號"],
         values="總市值(TWD)",
         hover_data={"名稱": True, "總市值(TWD)": ":,.0f"},
     )
+ codex/update-.gitignore-for-flow-analytics-av70ig
     # 加入平滑轉場動畫
     fig_sunburst.update_layout(
         transition={
@@ -114,12 +118,19 @@ def build_sunburst(df: pd.DataFrame) -> px.sunburst:
         }
     )
     fig_sunburst.update_layout(
+
+    fig.update_layout(
+ main
         title="Flow-Analytics｜Sunburst（地區 → 資產 → 個股）",
         margin=dict(t=80, l=20, r=20, b=20),
         font=dict(size=14),
         uniformtext=dict(minsize=10, mode="hide"),
     )
+ codex/update-.gitignore-for-flow-analytics-av70ig
     fig_sunburst.update_traces(
+
+    fig.update_traces(
+ main
         hovertemplate=(
             "<b>%{label}</b><br>"
             "名稱: %{customdata[0]}<br>"
@@ -127,7 +138,11 @@ def build_sunburst(df: pd.DataFrame) -> px.sunburst:
             "<extra></extra>"
         )
     )
+ codex/update-.gitignore-for-flow-analytics-av70ig
     return fig_sunburst
+
+    return fig
+ main
 
 
 def build_treemap(df: pd.DataFrame) -> px.treemap:
